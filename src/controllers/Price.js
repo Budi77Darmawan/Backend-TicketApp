@@ -4,8 +4,8 @@ const {
   checkpriceModel, postPaymentModel, postOrderModel
 } = require('../Model/Price')
 
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+// const bcrypt = require('bcryptjs')
+// const jwt = require('jsonwebtoken')
 require('dotenv')
 
 module.exports = {

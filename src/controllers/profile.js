@@ -1,6 +1,4 @@
 /* eslint-disable camelcase */
-
-const profile = require('../models/profile')
 const {
   getProfileDataModel,
   getProfileDataByIdModel,

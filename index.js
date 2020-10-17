@@ -8,10 +8,12 @@ app.use('/uploads', express.static('Uploads'))
 
 const account = require('./src/routes/account')
 // const order = require('./src/routers/price')
+const profileRouter = require('./src/routes/profile')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/account', account)
 // app.use('/order', order)
+app.use('/profile', profileRouter)
 
 app.use(cors())
 
