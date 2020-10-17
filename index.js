@@ -7,15 +7,15 @@ const cors = require('cors')
 app.use('/uploads', express.static('assets'))
 
 const account = require('./src/routes/account')
-const profile = require('./src/routes/profile')
 const order = require('./src/routes/price')
 const airport = require('./src/routes/airport')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/account', account)
-app.use('/profile', profile)
 app.use('/order', order)
 app.use('/airport', airport)
+const profileRouter = require('./src/routes/profile')
+app.use('/profile', profileRouter)
 
 app.use(cors())
 
