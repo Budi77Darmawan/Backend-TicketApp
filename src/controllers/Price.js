@@ -2,8 +2,8 @@
 
 const {
   checkPriceModel,
-  postPaymentModel,
   postOrderModel,
+  detailOrderbyIDModel,
   detailOrderModel
 } = require('../models/price')
 
@@ -44,16 +44,6 @@ module.exports = {
         message: 'Succes order!',
         data: setData
       })
-
-      // const setData2 = {
-      //   id_account,
-      //   id_order: order[0].id_order,
-      //   total_price,
-      //   created_at: new Date(),
-      //   update_at: new Date()
-      // }
-      // console.log(setData2)
-      // await postPaymentModel(setData2)
     } catch (error) {
       console.log(error)
       response.status(400).send({
@@ -65,18 +55,15 @@ module.exports = {
 
   getDataPrice: async (request, response) => {
     try {
-      const { order_class, nadult, nchild, city_destination, city_depature, times_flight } = request.body
+      const { id_plane, order_class, nadult, nchild, city_destination, city_depature, times_flight } = request.body
+
       if (nadult >= 0 && nchild >= 0) {
         let passengger = 'adult'
-
-        const checkDataPrice = await checkPriceModel([order_class, passengger, city_destination, city_depature, times_flight])
-        console.log(checkDataPrice.length)
+        const checkDataPrice = await checkPriceModel([id_plane, order_class, passengger, city_destination, city_depature, times_flight])
         const price1 = (checkDataPrice[0].price) * nadult
 
         passengger = 'child'
-
-        const checkDataPrice2 = await checkPriceModel([order_class, passengger, city_destination, city_depature, times_flight])
-        console.log(checkDataPrice2[0].price)
+        const checkDataPrice2 = await checkPriceModel([id_plane, order_class, passengger, city_destination, city_depature, times_flight])
         const price2 = (checkDataPrice2[0].price) * nchild
 
         var list = []
@@ -88,7 +75,6 @@ module.exports = {
             city_depature: checkDataPrice[i].city_depature,
             times_flight: checkDataPrice[i].times_flight,
             order_class: checkDataPrice[i].order_class
-
           }
 
           list[i] = setDataArray
@@ -114,10 +100,42 @@ module.exports = {
     }
   },
 
-  detailOrder: async (request, response) => {
+  detailOrderbyID: async (request, response) => {
     try {
       const id_order = request.params.id
-      const result = await detailOrderModel(id_order)
+      const result = await detailOrderbyIDModel(id_order)
+      delete result[0].created_at
+      delete result[0].update_at
+      delete result[0].id_plane
+      delete result[0].id_price
+      response.send({
+        success: true,
+        message: 'Detail order!',
+        data: result[0]
+      })
+    } catch (error) {
+      response.status(400).send({
+        success: false,
+        message: 'Bad Request'
+      })
+    }
+  },
+
+  detailOrder: async (request, response) => {
+    let id_account = ''
+    const token = request.headers.authorization.split(' ')[1]
+    jwt.verify(token, process.env.JWT_KEY, (error, result, response) => {
+      if ((error && error.name === 'JsonWebTokenError') || (error && error.name === 'TokenExpiredError')) {
+        response.status(403).send({
+          success: false,
+          message: error.message
+        })
+      } else {
+        id_account = result.id_account
+      }
+    })
+    try {
+      const result = await detailOrderModel(id_account)
       delete result[0].created_at
       delete result[0].update_at
       delete result[0].id_plane
