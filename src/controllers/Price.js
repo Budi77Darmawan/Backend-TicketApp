@@ -4,11 +4,12 @@ const {
   checkPriceModel,
   postOrderModel,
   detailOrderbyIDModel,
-  detailOrderModel
+  detailOrderModel,
+  getTicketDataModel
 } = require('../models/price')
 
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcrypt')
 require('dotenv')
 
 module.exports = {
@@ -26,9 +27,9 @@ module.exports = {
           id_account = result.id_account
         }
       })
-      const { order_name, total_price, id_plane, passengger, order_class, city_destination, city_depature, times_flight } = request.body
+      const { order_name, total_price, id_plane, passengger, order_class, city_destination, city_departure, times_flight } = request.body
 
-      const checkDataPrice = await checkPriceModel([id_plane, order_class, passengger, city_destination, city_depature, times_flight])
+      const checkDataPrice = await checkPriceModel([id_plane, order_class, passengger, city_destination, city_departure, times_flight])
 
       const setData = {
         id_account,
@@ -56,15 +57,15 @@ module.exports = {
 
   getDataPrice: async (request, response) => {
     try {
-      const { id_plane, order_class, nadult, nchild, city_destination, city_depature, times_flight } = request.body
+      const { id_plane, order_class, nadult, nchild, city_destination, city_departure, times_flight } = request.body
 
       if (nadult >= 0 && nchild >= 0) {
         let passengger = 'adult'
-        const checkDataPrice = await checkPriceModel([id_plane, order_class, passengger, city_destination, city_depature, times_flight])
+        const checkDataPrice = await checkPriceModel([id_plane, order_class, passengger, city_destination, city_departure, times_flight])
         const price1 = (checkDataPrice[0].price) * nadult
 
         passengger = 'child'
-        const checkDataPrice2 = await checkPriceModel([id_plane, order_class, passengger, city_destination, city_depature, times_flight])
+        const checkDataPrice2 = await checkPriceModel([id_plane, order_class, passengger, city_destination, city_departure, times_flight])
         const price2 = (checkDataPrice2[0].price) * nchild
 
         var list = []
@@ -73,7 +74,7 @@ module.exports = {
             totalharga: (checkDataPrice[i].price * nadult) + (checkDataPrice2[i].price * nchild),
             plane: checkDataPrice[i].id_plane,
             city_destination: checkDataPrice[i].city_destination,
-            city_depature: checkDataPrice[i].city_depature,
+            city_departure: checkDataPrice[i].city_departure,
             times_flight: checkDataPrice[i].times_flight,
             order_class: checkDataPrice[i].order_class
           }
@@ -152,5 +153,35 @@ module.exports = {
         message: 'Bad Request'
       })
     }
+  },
+
+  getTicketData: (req, res) => {
+    let { search, page, limit } = req.query
+    let searchKey = ''
+    let searchValue = ''
+    if (typeof search === 'object') {
+      searchKey = Object.keys(search)[0]
+      searchValue = Object.values(search)[0]
+    } else {
+      searchKey = 'city_destination'
+      searchValue = search || ''
+    }
+    !limit ? limit = 20 : limit = parseInt(limit)
+    !page ? page = 1 : page = parseInt(page)
+    const offset = (page - 1) * limit
+    getTicketDataModel(searchKey, searchValue, limit, offset, result => {
+      if (result.length) {
+        res.status(200).send({
+          success: true,
+          message: 'list ticket',
+          data: result
+        })
+      } else {
+        res.status(404).send({
+          success: false,
+          message: 'there is no item on list'
+        })
+      }
+    })
   }
 }

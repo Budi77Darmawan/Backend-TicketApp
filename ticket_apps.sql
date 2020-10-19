@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 17 Okt 2020 pada 12.21
--- Versi server: 10.4.11-MariaDB
--- Versi PHP: 7.2.28
+-- Generation Time: Oct 19, 2020 at 06:13 PM
+-- Server version: 10.4.6-MariaDB
+-- PHP Version: 7.3.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -25,7 +25,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `account`
+-- Table structure for table `account`
 --
 
 CREATE TABLE `account` (
@@ -34,35 +34,52 @@ CREATE TABLE `account` (
   `email` varchar(50) NOT NULL,
   `password` varchar(100) NOT NULL,
   `phone_number` varchar(20) NOT NULL,
-  `status` varchar(50) NOT NULL,
+  `status` enum('activated','not active') NOT NULL DEFAULT 'activated',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `account`
+-- Dumping data for table `account`
 --
 
 INSERT INTO `account` (`id_account`, `full_name`, `email`, `password`, `phone_number`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Wahyu Kurniawan', 'wahyukurniawaan@gmail.com', '', '+6289630033462', 'activated', '2020-10-16 05:56:54', '2020-10-16 05:56:54'),
-(2, 'test', 'test', '', '089630033462', 'not activated', '2020-10-16 09:44:58', '2020-10-16 09:44:58');
+(1, 'Wahyu Kurniawan', 'wahyukurniawaan@gmail.com', '$2b$12$3x96FpUTPy/SnrS62KWyo.q1Iyc/cHJmfBqsV8NnaoXH04bU9Ct9m', '+6289630033462', 'activated', '2020-10-16 05:56:54', '2020-10-16 05:56:54'),
+(10, 'Budi Darmawan', 'budi@gmail.com', '12345', '082292500000', 'activated', '2020-10-17 10:26:57', '2020-10-17 10:26:57'),
+(11, 'ihsan', 'san@gmail.com', '$2b$12$3x96FpUTPy/SnrS62KWyo.q1Iyc/cHJmfBqsV8NnaoXH04bU9Ct9m', '12345', 'activated', '2020-10-18 04:28:52', '2020-10-18 04:28:52'),
+(12, 'asas', 'as@gmal.com', '$2b$12$QQ4EGhuDopJEwS5K.7DmBu9TsQfkPfyRQF4vwSdZX8n/kneZ8GVUC', '111', 'activated', '2020-10-18 04:43:52', '2020-10-18 04:43:52'),
+(13, 'Wahyu Kurniawan', 'wahyu@gmail.com', '$2b$12$gkzjonJCsUSawm5SDM557eCpdfLGRrOtun91q1TZ7RjChotPqd8ma', '089630033462', 'activated', '2020-10-19 16:03:45', '2020-10-19 16:03:45');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `destination`
+-- Table structure for table `airport`
 --
 
-CREATE TABLE `destination` (
-  `id_destination` int(11) NOT NULL,
-  `image` varchar(50) NOT NULL,
-  `review` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `airport` (
+  `code_city` varchar(100) NOT NULL,
+  `city_name` varchar(100) NOT NULL,
+  `code_country` varchar(100) NOT NULL,
+  `country_name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `airport`
+--
+
+INSERT INTO `airport` (`code_city`, `city_name`, `code_country`, `country_name`) VALUES
+('BDO', 'Bandung', 'IDN', 'Indonesia'),
+('CGK', 'Jakarta', 'IDN', 'Indonesia'),
+('BPN', 'Balikpapan', 'IDN', 'Indonesia'),
+('PLW', 'Kota Palu', 'IDN', 'Indonesia'),
+('SUB', 'Surabaya', 'IDN', 'Indonesia'),
+('JFK', 'New York', 'USA', 'United States'),
+('MIA', 'Miami', 'USA', 'United States');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `order`
+-- Table structure for table `order`
 --
 
 CREATE TABLE `order` (
@@ -75,52 +92,39 @@ CREATE TABLE `order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `order`
+-- Dumping data for table `order`
 --
 
 INSERT INTO `order` (`id_order`, `id_account`, `id_price`, `order_name`, `created_at`, `update_at`) VALUES
-(1, 1, 0, '', '2020-10-17 15:14:54', '2020-10-17 15:14:54'),
-(2, 1, 0, 'sri', '2020-10-17 15:24:08', '2020-10-17 15:24:08'),
-(3, 1, 0, 'sutris', '2020-10-17 15:25:03', '2020-10-17 15:25:03'),
-(4, 1, 0, 'bagio', '2020-10-17 15:25:12', '2020-10-17 15:25:12'),
-(5, 1, 10, 'bagio', '2020-10-18 05:52:43', '2020-10-18 05:52:43'),
-(6, 1, 10, 'bagio', '2020-10-18 05:56:43', '2020-10-18 05:56:43'),
-(7, 1, 10, 'bagio', '2020-10-18 05:57:38', '2020-10-18 05:57:38'),
-(8, 1, 10, 'bagio', '2020-10-18 06:00:09', '2020-10-18 06:00:09'),
-(9, 1, 10, 'bagio', '2020-10-18 06:00:50', '2020-10-18 06:00:50');
+(10, 11, 9, 'Ikhsan', '2020-10-19 02:37:14', '2020-10-19 02:37:14');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `payment`
+-- Table structure for table `payment`
 --
 
 CREATE TABLE `payment` (
   `id_payment` int(11) NOT NULL,
+  `id_order` int(100) NOT NULL,
   `total_price` int(11) NOT NULL,
   `id_account` int(11) NOT NULL,
-  `status_payment` varchar(20) NOT NULL,
+  `status_payment` enum('paid','not paid') NOT NULL DEFAULT 'not paid',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `update_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `payment`
+-- Dumping data for table `payment`
 --
 
-INSERT INTO `payment` (`id_payment`, `total_price`, `id_account`, `status_payment`, `created_at`, `update_at`) VALUES
-(1, 1800, 1, 'belum dibayar', '2020-10-17 16:25:12', '2020-10-17 16:25:12'),
-(2, 1400, 1, 'belum dibayar', '2020-10-18 05:49:47', '2020-10-18 05:49:47'),
-(3, 1400, 1, 'belum dibayar', '2020-10-18 05:52:43', '2020-10-18 05:52:43'),
-(4, 1400, 1, 'belum dibayar', '2020-10-18 05:56:43', '2020-10-18 05:56:43'),
-(5, 1400, 1, 'belum dibayar', '2020-10-18 05:57:38', '2020-10-18 05:57:38'),
-(6, 1400, 1, 'belum dibayar', '2020-10-18 06:00:09', '2020-10-18 06:00:09'),
-(7, 1400, 1, 'belum dibayar', '2020-10-18 06:00:50', '2020-10-18 06:00:50');
+INSERT INTO `payment` (`id_payment`, `id_order`, `total_price`, `id_account`, `status_payment`, `created_at`, `update_at`) VALUES
+(9, 10, 700, 11, 'paid', '2020-10-19 02:39:45', '2020-10-19 02:39:45');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `plane`
+-- Table structure for table `plane`
 --
 
 CREATE TABLE `plane` (
@@ -130,7 +134,7 @@ CREATE TABLE `plane` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `plane`
+-- Dumping data for table `plane`
 --
 
 INSERT INTO `plane` (`id_plane`, `plane_name`, `plane_image`) VALUES
@@ -144,7 +148,7 @@ INSERT INTO `plane` (`id_plane`, `plane_name`, `plane_image`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `price`
+-- Table structure for table `price`
 --
 
 CREATE TABLE `price` (
@@ -152,46 +156,48 @@ CREATE TABLE `price` (
   `price` int(11) NOT NULL,
   `id_plane` int(11) NOT NULL,
   `order_class` varchar(20) NOT NULL,
-  `passangger` varchar(20) NOT NULL,
+  `passengger` varchar(20) NOT NULL,
   `city_destination` varchar(20) NOT NULL,
-  `city_depature` varchar(20) NOT NULL,
+  `city_departure` varchar(20) NOT NULL,
+  `time_departure` time NOT NULL DEFAULT current_timestamp(),
+  `time_destination` time NOT NULL DEFAULT current_timestamp(),
   `times_flight` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `price`
+-- Dumping data for table `price`
 --
 
-INSERT INTO `price` (`id_price`, `price`, `id_plane`, `order_class`, `passangger`, `city_destination`, `city_depature`, `times_flight`) VALUES
-(1, 300, 1, 'economy', 'adult', 'jakarta', 'surabaya', 'pagi'),
-(2, 150, 1, 'economy', 'child', 'jakarta', 'surabaya', 'pagi'),
-(3, 500, 1, 'business', 'adult', 'jakarta', 'surabaya', 'pagi'),
-(4, 250, 1, 'business', 'child', 'jakarta', 'surabaya', 'pagi'),
-(5, 700, 1, 'first class', 'adult', 'jakarta', 'surabaya', 'pagi'),
-(6, 350, 1, 'first class', 'child', 'jakarta', 'surabaya', 'pagi'),
-(7, 200, 1, 'economy', 'adult', 'bali', 'surabaya', 'pagi'),
-(8, 100, 1, 'economy', 'child', 'bali', 'surabaya', 'pagi'),
-(9, 400, 1, 'business', 'adult', 'bali', 'surabaya', 'pagi'),
-(10, 200, 1, 'business', 'child', 'bali', 'surabaya', 'pagi'),
-(11, 600, 1, 'first class', 'adult', 'bali', 'surabaya', 'pagi'),
-(12, 300, 1, 'first class', 'child', 'bali', 'surabaya', 'pagi'),
-(13, 350, 2, 'economy', 'adult', 'jakarta', 'surabaya', 'pagi'),
-(14, 175, 2, 'economy', 'child', 'jakarta', 'surabaya', 'pagi'),
-(15, 550, 2, 'business', 'adult', 'jakarta', 'surabaya', 'pagi'),
-(16, 275, 2, 'business', 'child', 'jakarta', 'surabaya', 'pagi'),
-(17, 750, 2, 'first class', 'adult', 'jakarta', 'surabaya', 'pagi'),
-(18, 375, 2, 'first class', 'child', 'jakarta', 'surabaya', 'pagi'),
-(19, 450, 2, 'economy', 'adult', 'bali', 'surabaya', 'pagi'),
-(20, 225, 2, 'economy', 'child', 'bali', 'surabaya', 'pagi'),
-(21, 650, 2, 'business', 'adult', 'bali', 'surabaya', 'pagi'),
-(22, 325, 2, 'business', 'child', 'bali', 'surabaya', 'pagi'),
-(23, 850, 2, 'first class', 'adult', 'bali', 'surabaya', 'pagi'),
-(24, 425, 2, 'first class', 'child', 'bali', 'surabaya', 'pagi');
+INSERT INTO `price` (`id_price`, `price`, `id_plane`, `order_class`, `passengger`, `city_destination`, `city_departure`, `time_departure`, `time_destination`, `times_flight`) VALUES
+(1, 100, 1, 'Economy', 'Adult', 'JFK', 'CGK', '12:33:00', '15:21:00', 'Pagi'),
+(2, 200, 2, 'Business', 'Adult', 'JFK', 'CGK', '12:33:00', '15:21:00', 'Pagi'),
+(3, 300, 1, 'First Class', 'Adult', 'JFK', 'CGK', '12:33:00', '15:21:00', 'Pagi'),
+(4, 50, 1, 'Economy', 'Child', 'JFK', 'CGK', '12:33:00', '15:21:00', 'Pagi'),
+(5, 100, 1, 'Business', 'Child', 'JFK', 'CGK', '12:33:00', '15:21:00', 'Pagi'),
+(6, 150, 1, 'First Class', 'Child', 'JFK', 'CGK', '12:33:00', '15:21:00', 'Pagi'),
+(7, 150, 3, 'Economy', 'Adult', 'JFK', 'CGK', '12:33:00', '15:21:00', 'Pagi'),
+(8, 300, 3, 'Business', 'Adult', 'JFK', 'CGK', '12:33:00', '15:21:00', 'Pagi'),
+(9, 500, 3, 'First Class', 'Adult', 'JFK', 'CGK', '12:33:00', '15:21:00', 'Pagi'),
+(10, 70, 3, 'Economy', 'Child', 'JFK', 'CGK', '12:33:00', '15:21:00', 'Pagi'),
+(11, 130, 3, 'Business', 'Child', 'JFK', 'CGK', '12:33:00', '15:21:00', 'Pagi'),
+(12, 200, 3, 'First Class', 'Child', 'JFK', 'CGK', '12:33:00', '15:21:00', 'Pagi'),
+(13, 50, 4, 'Economy', 'Adult', 'CGK', 'BPN', '12:33:00', '15:21:00', 'Pagi'),
+(14, 100, 4, 'Business', 'Adult', 'CGK', 'BPN', '12:33:00', '15:21:00', 'Pagi'),
+(15, 200, 4, 'First Class', 'Adult', 'CGK', 'BPN', '12:33:00', '15:21:00', 'Pagi'),
+(16, 30, 4, 'Economy', 'Child', 'CGK', 'BPN', '12:33:00', '15:21:00', 'Pagi'),
+(17, 60, 4, 'Business', 'Child', 'CGK', 'BPN', '12:33:00', '15:21:00', 'Pagi'),
+(18, 100, 4, 'First Class', 'Child', 'CGK', 'BPN', '12:33:00', '15:21:00', 'Pagi'),
+(19, 100, 3, 'Economy', 'Adult', 'CGK', 'BPN', '12:33:00', '15:21:00', 'Pagi'),
+(20, 150, 3, 'Business', 'Adult', 'CGK', 'BPN', '12:33:00', '15:21:00', 'Pagi'),
+(21, 200, 3, 'First Class', 'Adult', 'CGK', 'BPN', '12:33:00', '15:21:00', 'Pagi'),
+(22, 50, 3, 'Economy', 'Child', 'CGK', 'BPN', '12:33:00', '15:21:00', 'Pagi'),
+(23, 140, 3, 'Business', 'Child', 'CGK', 'BPN', '12:33:00', '15:21:00', 'Pagi'),
+(24, 180, 3, 'First Class', 'Child', 'CGK', 'BPN', '12:33:00', '15:21:00', 'Pagi');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `profile`
+-- Table structure for table `profile`
 --
 
 CREATE TABLE `profile` (
@@ -203,105 +209,110 @@ CREATE TABLE `profile` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `profile`
+-- Dumping data for table `profile`
 --
 
 INSERT INTO `profile` (`id_profile`, `id_account`, `profile_image`, `city`, `address`) VALUES
-(1, 1, 'image-1602870241152.jpg', 'Jakarta', 'South Jakarta');
+(1, 1, 'image-1602870241152.jpg', 'Jakarta', 'South Jakarta'),
+(4, 10, 'image-1602938685769.jpg', 'Nunukan', 'Jl. Indonesia'),
+(6, 11, 'image-1602870241152.jpg', NULL, NULL),
+(7, 12, 'image-1602870241152.jpg', NULL, NULL),
+(8, 13, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `account`
+-- Indexes for table `account`
 --
 ALTER TABLE `account`
   ADD PRIMARY KEY (`id_account`);
 
 --
--- Indeks untuk tabel `destination`
---
-ALTER TABLE `destination`
-  ADD PRIMARY KEY (`id_destination`);
-
---
--- Indeks untuk tabel `order`
+-- Indexes for table `order`
 --
 ALTER TABLE `order`
   ADD PRIMARY KEY (`id_order`);
 
 --
--- Indeks untuk tabel `payment`
+-- Indexes for table `payment`
 --
 ALTER TABLE `payment`
   ADD PRIMARY KEY (`id_payment`);
 
 --
--- Indeks untuk tabel `plane`
+-- Indexes for table `plane`
 --
 ALTER TABLE `plane`
   ADD PRIMARY KEY (`id_plane`);
 
 --
--- Indeks untuk tabel `price`
+-- Indexes for table `price`
 --
 ALTER TABLE `price`
-  ADD PRIMARY KEY (`id_price`);
+  ADD PRIMARY KEY (`id_price`),
+  ADD KEY `constraint_id_plane` (`id_plane`);
 
 --
--- Indeks untuk tabel `profile`
+-- Indexes for table `profile`
 --
 ALTER TABLE `profile`
   ADD PRIMARY KEY (`id_profile`),
   ADD KEY `constraint_id_user` (`id_account`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `account`
+-- AUTO_INCREMENT for table `account`
 --
 ALTER TABLE `account`
-  MODIFY `id_account` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_account` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT untuk tabel `destination`
---
-ALTER TABLE `destination`
-  MODIFY `id_destination` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `order`
+-- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
-  MODIFY `id_order` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_order` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
--- AUTO_INCREMENT untuk tabel `payment`
+-- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `id_payment` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_payment` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- AUTO_INCREMENT untuk tabel `plane`
+-- AUTO_INCREMENT for table `plane`
 --
 ALTER TABLE `plane`
   MODIFY `id_plane` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- AUTO_INCREMENT untuk tabel `profile`
+-- AUTO_INCREMENT for table `price`
+--
+ALTER TABLE `price`
+  MODIFY `id_price` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT for table `profile`
 --
 ALTER TABLE `profile`
-  MODIFY `id_profile` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_profile` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+-- Constraints for dumped tables
 --
 
 --
--- Ketidakleluasaan untuk tabel `profile`
+-- Constraints for table `price`
+--
+ALTER TABLE `price`
+  ADD CONSTRAINT `constraint_id_plane` FOREIGN KEY (`id_plane`) REFERENCES `plane` (`id_plane`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `profile`
 --
 ALTER TABLE `profile`
   ADD CONSTRAINT `constraint_id_user` FOREIGN KEY (`id_account`) REFERENCES `account` (`id_account`) ON DELETE CASCADE ON UPDATE CASCADE;
