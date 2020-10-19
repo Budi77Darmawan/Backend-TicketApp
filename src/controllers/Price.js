@@ -7,26 +7,29 @@ const {
   detailOrderModel
 } = require('../models/price')
 
-// const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 require('dotenv')
 
 module.exports = {
   orderUser: async (request, response) => {
     try {
-      const { id_account, order_name, total_price, id_plane, passengger, order_class, city_destination, city_depature, times_flight } = request.body
+      let id_account = ''
+      const token = request.headers.authorization.split(' ')[1]
+      jwt.verify(token, process.env.JWT_KEY, (error, result, response) => {
+        if ((error && error.name === 'JsonWebTokenError') || (error && error.name === 'TokenExpiredError')) {
+          response.status(403).send({
+            success: false,
+            message: error.message
+          })
+        } else {
+          id_account = result.id_account
+        }
+      })
+      const { order_name, total_price, id_plane, passengger, order_class, city_destination, city_depature, times_flight } = request.body
 
       const checkDataPrice = await checkPriceModel([id_plane, order_class, passengger, city_destination, city_depature, times_flight])
 
       const setData = {
-        id_account,
-        total_price,
-        created_at: new Date(),
-        update_at: new Date()
-      }
-
-      await postPaymentModel(setData)
-
-      const setData2 = {
         id_account,
         id_price: checkDataPrice[0].id_price,
         order_name,
@@ -34,13 +37,23 @@ module.exports = {
         update_at: new Date()
       }
 
-      const postOrder = await postOrderModel(setData2)
+      await postOrderModel(setData, id_account, total_price)
 
       response.send({
         success: true,
         message: 'Succes order!',
-        data: postOrder
+        data: setData
       })
+
+      // const setData2 = {
+      //   id_account,
+      //   id_order: order[0].id_order,
+      //   total_price,
+      //   created_at: new Date(),
+      //   update_at: new Date()
+      // }
+      // console.log(setData2)
+      // await postPaymentModel(setData2)
     } catch (error) {
       console.log(error)
       response.status(400).send({

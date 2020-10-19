@@ -8,7 +8,7 @@ const {
 const router = Router()
 
 router.get('/plane', getDataPrice)
-router.post('/order', orderUser)
+router.post('/', orderUser)
 router.get('/detail/:id', detailOrder)
 
 module.exports = router

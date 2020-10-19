@@ -17,7 +17,7 @@ module.exports = {
 
   checkPriceModel: (arr) => {
     return new Promise((resolve, reject) => {
-      db.query(`SELECT * FROM price WHERE id_plane='${arr[0]}' AND order_class='${arr[1]}' AND passangger='${arr[2]}' AND city_destination='${arr[3]}' AND city_depature='${arr[4]}' AND times_flight= '${arr[5]}'`, (error, result) => {
+      db.query(`SELECT * FROM price WHERE id_plane='${arr[0]}' AND order_class='${arr[1]}' AND passengger='${arr[2]}' AND city_destination='${arr[3]}' AND city_depature='${arr[4]}' AND times_flight= '${arr[5]}'`, (error, result) => {
         if (!error) {
           resolve(result)
         } else {
@@ -26,9 +26,12 @@ module.exports = {
       })
     })
   },
-  postOrderModel: (setData) => {
+  postOrderModel: (setData, id_account, total_price) => {
     return new Promise((resolve, reject) => {
-      db.query('INSERT INTO order SET ?', setData, (error, result) => {
+      db.query('BEGIN')
+      db.query('INSERT INTO `order` SET ?', setData)
+      db.query(`INSERT INTO payment (id_order, id_account, total_price) VALUES (LAST_INSERT_ID(), ${id_account}, ${total_price})`)
+      db.query('COMMIT', (error, result) => {
         if (!error) {
           resolve(result)
         } else {
