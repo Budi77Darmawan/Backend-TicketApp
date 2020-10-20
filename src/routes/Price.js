@@ -3,7 +3,8 @@ const {
   orderUser,
   getDataPrice,
   detailOrderbyID,
-  detailOrder
+  detailOrder,
+  getTicketData
 } = require('../controllers/price')
 
 const { authorization } = require('../middleware/auth')
@@ -13,5 +14,6 @@ router.get('/plane', getDataPrice)
 router.post('/', authorization, orderUser)
 router.get('/detail/:id', authorization, detailOrderbyID)
 router.get('/detail/', authorization, detailOrder)
+router.get('/ticket/', authorization, getTicketData)
 
 module.exports = router
