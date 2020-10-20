@@ -64,10 +64,10 @@ module.exports = {
     })
   },
 
-  getTicketDataModel: (searchKey, searchValue, limit, offset, callBack) => {
+  getTicketDataModel: (searchKey, searchValue, limit, offset, city_departure, city_destination, order_class, passengger, callBack) => {
     db.query(`SELECT plane.plane_image, price.city_departure, price.city_destination, price.time_departure,
     price.time_destination, price.price FROM price INNER JOIN plane ON price.id_plane = 
-    plane.id_plane WHERE ${searchKey} LIKE '%${searchValue}%' LIMIT ${limit} OFFSET ${offset}`,
+    plane.id_plane WHERE ${searchKey} LIKE '%${searchValue}%' AND price.city_destination = '${city_destination}' AND price.city_departure = '${city_departure}' AND price.order_class = '${order_class}' AND price.passengger = '${passengger}' LIMIT ${limit} OFFSET ${offset}`,
     (err, result, fields) => {
       !err ? callBack(result) : callBack(err)
     })

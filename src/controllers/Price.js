@@ -156,7 +156,7 @@ module.exports = {
   },
 
   getTicketData: (req, res) => {
-    let { search, page, limit } = req.query
+    let { search, page, limit, city_destination, city_departure, order_class, passengger } = req.query
     let searchKey = ''
     let searchValue = ''
     if (typeof search === 'object') {
@@ -169,7 +169,7 @@ module.exports = {
     !limit ? limit = 20 : limit = parseInt(limit)
     !page ? page = 1 : page = parseInt(page)
     const offset = (page - 1) * limit
-    getTicketDataModel(searchKey, searchValue, limit, offset, result => {
+    getTicketDataModel(searchKey, searchValue, limit, offset, city_departure, city_destination, order_class, passengger, result => {
       if (result.length) {
         res.status(200).send({
           success: true,
@@ -181,6 +181,7 @@ module.exports = {
           success: false,
           message: 'there is no item on list'
         })
+        console.log(result)
       }
     })
   }
